@@ -12,33 +12,45 @@ import {
 
 import { Token, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
-const CreateToken = ({ walletAddress }) => {
+const CreateToken = ({
+	walletAddress,
+	setMintingWalletSecretKey,
+	mintingWalletSecretKey,
+	createdTokenPublicKey,
+	setCreatedTokenPublicKey,
+}) => {
+	//declaring states
 	const [isTokenCreated, setIsTokenCreated] = useState(false);
-	const [createdTokenPublicKey, setCreatedTokenPublicKey] = useState(null);
-	const [mintingWalletSecretKey, setMintingWalletSecretKey] = useState(null);
 
 	const initialMintHelper = async () => {
 		try {
-			setLoading(true);
+			//creating connection
 			const connection = new Connection(
 				clusterApiUrl("devnet"),
 				"confirmed"
 			);
 
-			const mintRequester = await provider.publicKey;
+			//extracting wallet address
+			const mintRequester = walletAddress;
+
+			//generating new wallet for minting
 			const mintingFromWallet = await Keypair.generate();
+
 			setMintingWalletSecretKey(
 				JSON.stringify(mintingFromWallet.secretKey)
 			);
-
+			//requesting airdrop
 			const fromAirDropSignature = await connection.requestAirdrop(
 				mintingFromWallet.publicKey,
 				LAMPORTS_PER_SOL
 			);
+
+			//confirming transaction
 			await connection.confirmTransaction(fromAirDropSignature, {
 				commitment: "confirmed",
 			});
 
+			//-------------------------------
 			const creatorToken = await Token.createMint(
 				connection,
 				mintingFromWallet,
@@ -78,30 +90,26 @@ const CreateToken = ({ walletAddress }) => {
 				[mintingFromWallet],
 				{ commitment: "confirmed" }
 			);
-
 			console.log("SIGNATURE:", signature);
 
 			setCreatedTokenPublicKey(creatorToken.publicKey.toString());
 			setIsTokenCreated(true);
-			setLoading(false);
 		} catch (err) {
 			console.log(err);
-			setLoading(false);
 		}
 	};
+
 	return (
-		<div>
-			{walletConnected ? (
+		<>
+			{walletAddress ? (
 				<p>
 					Create your own token
-					<button disabled={loading} onClick={initialMintHelper}>
-						Initial Mint{" "}
-					</button>
+					<button onClick={initialMintHelper}>Initial Mint </button>
 				</p>
 			) : (
 				<></>
 			)}
-		</div>
+		</>
 	);
 };
 

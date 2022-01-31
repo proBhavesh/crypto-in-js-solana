@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Styles.css";
+// import "./Styles.css";
 // import twitterLogo from "./assets/twitter-logo.svg";
 import {
   Connection,
@@ -13,7 +13,7 @@ const ConnectWallet = ({ setWalletAddress, walletAddress }) => {
   // State
   // const [walletAddress, setWalletAddress] = useState(null);
   // const [walletAddress, setWalletAddress] = useState(false);
-  const [provider, setProvider] = useState();
+  // const [provider, setProvider] = useState();
   const [loading, setLoading] = useState();
 
   // Actions
@@ -40,7 +40,7 @@ const ConnectWallet = ({ setWalletAddress, walletAddress }) => {
     if (solana) {
       const response = await solana.connect();
       console.log("Connected with Public Key:", response.publicKey.toString());
-      setWalletAddress(response.publicKey.toString());
+      setWalletAddress(response.publicKey);
       // setWalletAddress(true);
     }
   };
@@ -76,11 +76,11 @@ const ConnectWallet = ({ setWalletAddress, walletAddress }) => {
       setLoading(true);
       const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
       const fromAirDropSignature = await connection.requestAirdrop(
-        new PublicKey(walletAddress),
+        new PublicKey(walletAddress.toString()),
         LAMPORTS_PER_SOL
       );
       console.log(
-        `1 SOL airdropped to your wallet ${walletAddress} successfully`
+        `1 SOL airdropped to your wallet ${walletAddress.toString()} successfully`
       );
       setLoading(false);
     } catch (err) {
