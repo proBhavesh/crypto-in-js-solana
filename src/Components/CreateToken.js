@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./Styles.css";
 
 import {
 	Connection,
@@ -101,14 +102,23 @@ const CreateToken = ({
 
 	return (
 		<>
-			{walletAddress ? (
-				<p>
-					Create your own token
-					<button onClick={initialMintHelper}>Initial Mint </button>
-				</p>
-			) : (
-				<></>
-			)}
+			<div className="App">
+				<div className="container">
+					{walletAddress ? (
+						<>
+							<p className="header">Create your own token</p>
+							<button
+								onClick={initialMintHelper}
+								className="cta-button connect-wallet-button"
+							>
+								Initial Mint{" "}
+							</button>
+						</>
+					) : (
+						<></>
+					)}
+				</div>
+			</div>
 		</>
 	);
 };

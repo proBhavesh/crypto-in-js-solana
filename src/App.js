@@ -20,11 +20,11 @@ const App = () => {
         createdTokenPublicKey={createdTokenPublicKey}
         setCreatedTokenPublicKey={setCreatedTokenPublicKey}
       />
-      <MintMore
+    {/*  <MintMore
         walletAddress={walletAddress}
         mintingWalletSecretKey={mintingWalletSecretKey}
         createdTokenPublicKey={createdTokenPublicKey}
-      />
+      />*/}
     </div>
   );
 };
