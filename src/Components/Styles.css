@@ -1,3 +1,6 @@
+body{
+  background: black;
+}
 .App {
   height: 50vh;
   background-color: rgb(20, 20, 20);
